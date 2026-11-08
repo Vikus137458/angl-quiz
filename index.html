@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crack the Code: English Idiom Quiz</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇬🇧</text></svg>">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .container {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 800px;
+    width: 100%;           /* ← ВАЖНО! */
+    box-sizing: border-box; /* ← ВАЖНО! */
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    margin: 20px;          /* ← Добавьте отступы от краев экрана */
+  } 
+  h1 { 
+    color: #333; 
+    margin-bottom: 10px; 
+    font-size: 28px;
+    text-align: center;
+  }
+  .subtitle { 
+    color: #666; 
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 16px;
+  }
+  .form-group { margin-bottom: 20px; }
+  .form-group label { 
+    display: block; 
+    margin-bottom: 8px; 
+    color: #333; 
+    font-weight: 600;
+  }
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus,
+  .form-group select:focus { 
+    outline: none; 
+    border-color: #667eea; 
+  }
+  .progress {
+    background: #eee;
+    height: 8px;
+    border-radius: 4px;
+    margin-bottom: 30px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    height: 100%;
+    transition: width 0.3s;
+  }
+  .question-image {
+    width: 100%;
+    max-width: 600px;
+    max-height: 350px;
+    height: auto;
+    width: auto;
+    object-fit: contain;
+    border-radius: 15px;
+    margin: 0 auto 20px;
+    display: block;
+    background: #f0f0f0;
+  }
+  .question { 
+    font-size: 22px; 
+    margin-bottom: 25px; 
+    color: #333; 
+    font-weight: 600;
+    text-align: center;
+  }
+  .idiom-text {
+    font-size: 26px;
+    color: #667eea;
+    font-style: italic;
+    margin-bottom: 10px;
+  }
+  .hint {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .options { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 12px; 
+  }
+  .option {
+    background: #f5f7ff;
+    border: 2px solid transparent;
+    padding: 16px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    font-size: 16px;
+    color: #333;
+  }
+  .option:hover { 
+    background: #e8ecff; 
+    border-color: #667eea; 
+    transform: translateX(5px); 
+  }
+  .final-task {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+  .final-task label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #333;
+  }
+  .final-task textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 16px;
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+  }
+  .final-task textarea:focus {
+    outline: none;
+    border-color: #667eea;
+  }
+  .idiom-list {
+    background: #f0f4ff;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .idiom-list strong {
+    color: #667eea;
+  }
+  .result { text-align: center; }
+  .result-score {
+    font-size: 72px;
+    font-weight: bold;
+    color: #667eea;
+    margin-bottom: 20px;
+  }
+  .result-message {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 30px;
+  }
+  .btn {
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    margin-top: 20px;
+  }
+  .btn:hover { transform: scale(1.05); }
+  .btn:disabled { 
+    opacity: 0.6; 
+    cursor: not-allowed; 
+  }
+  .hidden { display: none; }
+  .error { 
+    color: #e74c3c; 
+    font-size: 14px; 
+    margin-top: 5px; 
+  }
+  .question-counter {
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 15px;
+  }
+  .result-image {
+  width: 100%;
+  max-width: 600px;
+  max-height: 350px;
+  height: auto;
+  width: auto;
+  object-fit: contain;
+  border-radius: 15px;
+  margin: 0 auto 20px;
+  display: block;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+  /* Адаптивность для мобильных устройств */
+@media screen and (max-width: 600px) {
+  .container {
+    padding: 20px;  /* Уменьшаем отступы */
+    border-radius: 15px;
+  }
+  
+  h1 {
+    font-size: 22px;  /* Уменьшаем заголовок */
+  }
+  
+  .subtitle {
+    font-size: 14px;
+  }
+  
+  /* Картинка вопросов */
+  .question-image {
+    max-width: 100%;  /* Не превышает ширину контейнера */
+    height: auto;     /* Автоматическая высота */
+    max-height: 200px;
+  }
+  
+  /* Картинка результата */
+  .result-image {
+    max-width: 100%;  /* Не превышает ширину контейнера */
+    height: auto;     /* Автоматическая высота */
+    max-height: 200px;
+  }
+  
+  .idiom-text {
+    font-size: 20px;
+  }
+  
+  .question {
+    font-size: 18px;
+  }
+  
+  .option {
+    font-size: 14px;
+    padding: 12px 16px;
+  }
+  
+  .btn {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+  
+  .result-score {
+    font-size: 56px;
+  }
+  
+  .result-message {
+    font-size: 16px;
+  }
+  
+  .form-group input,
+  .form-group select {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+  
+  .idiom-list {
+    font-size: 12px;
+    padding: 10px;
+  }
+  
+  .final-task textarea {
+    font-size: 14px;
+  }
+  
+  .result-phosagro {
+    padding: 12px;
+    font-size: 13px;
+  }
+}
+
+/* Для очень маленьких экранов */
+@media screen and (max-width: 400px) {
+  .container {
+    padding: 15px;
+  }
+  
+  h1 {
+    font-size: 18px;
+  }
+  
+  .question-image,
+  .result-image {
+    max-height: 180px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- Экран ввода данных -->
+  <div id="name-screen">
+    <h1>🧠 Crack the Code: The English Idiom Quiz</h1>
+    <p class="subtitle">Взломай код: Квиз по английским идиомам</p>
+    <div class="form-group">
+      <label for="surname">Фамилия *</label>
+      <input type="text" id="surname" placeholder="Введи свою фамилию" required>
+      <div class="error hidden" id="surname-error">Пожалуйста, введи фамилию</div>
+    </div>
+    <div class="form-group">
+      <label for="name">Имя *</label>
+      <input type="text" id="name" placeholder="Введи своё имя" required>
+      <div class="error hidden" id="name-error">Пожалуйста, введи имя</div>
+    </div>
+    <div class="form-group">
+      <label for="class">Класс *</label>
+      <select id="class" required>
+        <option value="">Выбери класс</option>
+        <option value="5а">5а</option>
+        <option value="5б">5б</option>
+        <option value="5в">5в</option>
+        <option value="6а">6а</option>
+        <option value="6б">6б</option>
+        <option value="6в">6в</option>
+        <option value="6г">6г</option>
+      </select>
+      <div class="error hidden" id="class-error">Пожалуйста, выбери класс</div>
+    </div>
+    <button class="btn" onclick="startQuiz()">Начать квиз</button>
+  </div>
+
+  <!-- Экран инструкции -->
+  <div id="instruction-screen" class="hidden">
+    <h1>📋 Инструкция</h1>
+    <p class="subtitle" style="font-size: 18px; color: #333; line-height: 1.6;">
+        Прочитайте английскую идиому.<br>
+        Выберите один вариант перевода, который правильно передаёт её смысл (известный русский аналог).
+    </p>
+       
+    <div style="background: #f0f4ff; padding: 20px; border-radius: 12px; margin: 20px 0; text-align: left;">
+        <p style="font-size: 16px; color: #333; margin-bottom: 10px;"><strong>Пример:</strong></p>
+        <p style="font-size: 18px; color: #667eea; font-style: italic; margin-bottom: 10px;">"It's raining cats and dogs."</p>
+        <p style="font-size: 16px; color: #333;">
+        А) С неба падают кошки и собаки.<br>
+        Б) Идёт проливной дождь. ✓<br>
+        В) Дождь такой сильный, что будит всех животных.
+        </p>
+    </div>
+
+    <p style="font-size: 16px; color: #666; margin-bottom: 20px;">
+        Всего в квизе <strong>15 вопросов</strong>. В конце вас ждёт финальное задание.
+    </p>
+
+    <p style="font-size: 16px; color: #666; margin-bottom: 20px;">
+        ⏱️ Примерное время выполнения: <strong>10-15 минут</strong>
+    </p> 
+
+    <button class="btn" onclick="goToQuiz()">Перейти к вопросам</button>
+  </div>
+
+  <!-- Экран вопросов -->
+  <div id="quiz-screen" class="hidden">
+    <div class="question-counter" id="question-counter"></div>
+    <div class="progress"><div class="progress-bar" id="progress"></div></div>
+    <img class="question-image" id="question-image" alt="Идиома">
+    <div class="question">
+      <div class="idiom-text" id="idiom-text"></div>
+      <div class="hint" id="hint"></div>
+    </div>
+    <div class="options" id="options"></div>
+  </div>
+
+  <!-- Экран финального задания -->
+  <div id="final-screen" class="hidden">
+    <h1>🎯 Финальное задание</h1>
+    <p class="subtitle">Выбери идиому, которая тебе понравилась больше всего, и запиши её перевод</p>
+    
+    <div class="idiom-list">
+      <strong>Все 15 идиом из квиза:</strong><br>
+      1. It's raining cats and dogs<br>
+      2. A piece of cake<br>
+      3. Every cloud has a silver lining<br>
+      4. When in Rome, do as the Romans do<br>
+      5. The early bird catches the worm<br>
+      6. Break a leg!<br>
+      7. Let the cat out of the bag<br>
+      8. When pigs fly<br>
+      9. The ball is in your court<br>
+      10. Spill the beans<br>
+      11. Don't cry over spilt milk<br>
+      12. Look before you leap<br>
+      13. It's not rocket science<br>
+      14. Don't count your chickens before they hatch<br>
+      15. The grass is always greener on the other side
+    </div>
+
+    <div class="final-task">
+      <label for="favorite-idiom">Какая идиома тебе понравилась больше всего? (напиши на английском)</label>
+      <textarea id="favorite-idiom" placeholder="Например: A piece of cake"></textarea>
+    </div>
+
+    <div class="final-task">
+      <label for="idiom-translation">Её перевод на русский</label>
+      <textarea id="idiom-translation" placeholder="Например: Очень лёгкое дело, проще пареной репы"></textarea>
+    </div>
+
+    <button class="btn" onclick="submitFinal()">Завершить квиз</button>
+  </div>
+
+  <!-- Экран результата -->
+    <div id="result-screen" class="result hidden">
+      <img class="result-image" id="result-image" alt="Результат">
+      <div class="result-score" id="result-score"></div>
+      <div class="result-message" id="result-message"></div>
+      <button class="btn" onclick="restart()">Пройти ещё раз</button>
+    </div>
+</div>  
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwpDQo0MjRGJ1ZVDacg0PVcKO4lvGx5okDLh8h3lWt8tmjV7jNN72MLmlTPPLqELLHIqA/exec";
+
+const resultImages = {
+  excellent: {
+    image: "images/1_1.jpg",
+    message: "🏆 Excellent! Ты настоящий знаток английских идиом!"
+  },
+  great: {
+    image: "images/1_2.jpg",
+    message: "👍 Great job! Очень хороший результат!"
+  },
+  good: {
+    image: "images/1_3.jpg", // Учеба/книги
+    message: "👌 Good effort! Неплохо, но есть куда расти!"
+  },
+  learning: {
+    image: "images/1_4.jpeg", // Мотивация учиться
+    message: "📚 Keep learning! Продолжай изучать идиомы!"
+  }
+};
+
+const questions = [
+  {
+    idiom: "It's raining cats and dogs.",
+    hint: "Подсказка: речь о погоде",
+    image: "images/1.jpg",
+    options: [
+      { letter: "A", text: "С неба падают кошки и собаки." },
+      { letter: "Б", text: "Идёт проливной дождь." },
+      { letter: "В", text: "Дождь такой сильный, что будит всех животных." }
+    ],
+    correct: "Б"
+  },
+  {
+    idiom: "A piece of cake.",
+    hint: "Подсказка: о сложности задачи",
+    image: "images/2.jpg",
+    options: [
+      { letter: "A", text: "Кусочек торта." },
+      { letter: "Б", text: "Очень лёгкое дело, проще пареной репы." },
+      { letter: "В", text: "Сладкая и беззаботная жизнь." }
+    ],
+    correct: "Б"
+  },
+  {
+    idiom: "Every cloud has a silver lining.",
+    hint: "Подсказка: lining - оболочка, подкладка",
+    image: "images/3.jpg",
+    options: [
+      { letter: "A", text: "У каждого облака есть серебряная подкладка." },
+      { letter: "Б", text: "Нет худа без добра." },
+      { letter: "В", text: "Серебряные облака приносят удачу." }
+    ],
+    correct: "Б"
+  },
+  {
+    idiom: "When in Rome, do as the Romans do.",
+    hint: "Подсказка: Rome - Рим",
+    image: "images/4.jpg",
+    options: [
+      { letter: "A", text: "В чужой монастырь со своим уставом не ходят." },
+      { letter: "Б", text: "Римляне всегда знают, как правильно поступить." },
+      { letter: "В", text: "Путешествуя, нужно обязательно посетить Рим." }
+    ],
+    correct: "A"
+  },
+  {
+    idiom: "The early bird catches the worm.",
+    hint: "Подсказка: catch - ловить, worm - червяк",
+    image: "images/5.jpg",
+    options: [
+      { letter: "A", text: "Птицы едят червей только по утрам." },
+      { letter: "Б", text: "Кто рано встаёт, тому Бог подаёт." },
+      { letter: "В", text: "Ранняя пташка всегда голодна." }
+    ],
+    correct: "Б"
+  },
+  {
+    idiom: "Break a leg!",
+    hint: "Подсказка: break - ломать",
+    image: "images/6.jpg",
+    options: [
+      { letter: "A", text: "Остерегайся падений и травм." },
+      { letter: "Б", text: "Ни пуха ни пера!" },
+      { letter: "В", text: "Сломай ногу, чтобы не идти в школу." }
+    ],
+    correct: "Б"
+  },
+  {
+    idiom: "Let the cat out of the bag.",
+    hint: "Подсказка: о секретах",
+    image: "images/7.jpg",
+    options: [
+      { letter: "A", text: "Купить кота в мешке." },
+      { letter: "Б", text: "Выпустить кота из мешка (выдать секрет)." },
+      { letter: "В", text: "Позволить кошке гулять самой по себе." }
+    ],
+    correct: "Б"
+  },
+  {
+    idiom: "When pigs fly.",
+    hint: "Подсказка: о чём-то невозможном",
+    image: "images/8.jpg",
+    options: [
+      { letter: "A", text: "Когда рак на горе свистнет." },
+      { letter: "Б", text: "Когда свиньи учатся летать." },
+      { letter: "В", text: "Свиньи могут летать только во сне." }
+    ],
+    correct: "A"
+  },
+  {
+    idiom: "The ball is in your court.",
+    hint: "Подсказка: court - теннисный корт",
+    image: "images/9.jpg",
+    options: [
+      { letter: "A", text: "Ты должен играть в теннис." },
+      { letter: "Б", text: "Решение за тобой." },
+      { letter: "В", text: "Мяч перелетел на твою сторону поля." }
+    ],
+    correct: "Б"
+  },
+  {
+    idiom: "Spill the beans.",
+    hint: "Подсказка: spill - рассыпать, пролить",
+    image: "images/10.jpg",
+    options: [
+      { letter: "A", text: "Приготовить вкусное блюдо из фасоли." },
+      { letter: "Б", text: "Рассыпать бобы на пол." },
+      { letter: "В", text: "Проболтаться, выдать секрет." }
+    ],
+    correct: "В"
+  },
+  {
+    idiom: "Don't cry over spilt milk.",
+    hint: "Подсказка: spill/spilt - пролить, рассыпать",
+    image: "images/11.jpg",
+    options: [
+      { letter: "A", text: "Пролитое молоко можно вытереть тряпкой." },
+      { letter: "Б", text: "Что сделано, то сделано (Слезами горю не поможешь)." },
+      { letter: "В", text: "Не плачь, потому что молоко ещё есть в холодильнике." }
+    ],
+    correct: "Б"
+  },
+  {
+    idiom: "Look before you leap.",
+    hint: "Подсказка: leap - прыгать",
+    image: "images/12.jpg",
+    options: [
+      { letter: "A", text: "Прыгай только тогда, когда все смотрят." },
+      { letter: "Б", text: "Не зная броду, не суйся в воду." },
+      { letter: "В", text: "Сначала посмотри, а потом прыгай с парашютом." }
+    ],
+    correct: "Б"
+  },
+  {
+    idiom: "It's not rocket science.",
+    hint: "Подсказка: science - наука",
+    image: "images/13.jpg",
+    options: [
+      { letter: "A", text: "Учёные не изучают ракеты." },
+      { letter: "Б", text: "Это не так уж сложно (Это не бином Ньютона)." },
+      { letter: "В", text: "Ракетостроение - это очень просто." }
+    ],
+    correct: "Б"
+  },
+  {
+    idiom: "Don't count your chickens before they hatch.",
+    hint: "Подсказка: count - считать, hatch - вылупляться",
+    image: "images/14.jpg",
+    options: [
+      { letter: "A", text: "Цыплята сами себя не посчитают." },
+      { letter: "Б", text: "Не дели шкуру неубитого медведя." },
+      { letter: "В", text: "Не считай цыплят, пока они не вылупились." }
+    ],
+    correct: "Б"
+  },
+  {
+    idiom: "The grass is always greener on the other side.",
+    hint: "Подсказка: о зависти к другим",
+    image: "images/15.jpg",
+    options: [
+      { letter: "A", text: "Трава на соседнем поле всегда зеленее и сочнее." },
+      { letter: "Б", text: "Хорошо там, где нас нет (Чужая жизнь всегда кажется лучше)." },
+      { letter: "В", text: "Соседи всегда лучше ухаживают за своим газоном." }
+    ],
+    correct: "Б"
+  }
+];
+
+let currentQ = 0;
+let score = 0;
+let userAnswers = [];
+let userData = {};
+
+function startQuiz() {
+  const surname = document.getElementById("surname").value.trim();
+  const name = document.getElementById("name").value.trim();
+  const className = document.getElementById("class").value;
+  
+  let hasError = false;
+  
+  if (!surname) {
+    document.getElementById("surname-error").classList.remove("hidden");
+    hasError = true;
+  } else {
+    document.getElementById("surname-error").classList.add("hidden");
+  }
+  
+  if (!name) {
+    document.getElementById("name-error").classList.remove("hidden");
+    hasError = true;
+  } else {
+    document.getElementById("name-error").classList.add("hidden");
+  }
+  
+  if (!className) {
+    document.getElementById("class-error").classList.remove("hidden");
+    hasError = true;
+  } else {
+    document.getElementById("class-error").classList.add("hidden");
+  }
+  
+  if (hasError) return;
+  
+  userData = { surname, name, className };
+  
+  // Показываем экран инструкции вместо квиза
+  document.getElementById("name-screen").classList.add("hidden");
+  document.getElementById("instruction-screen").classList.remove("hidden");
+}
+
+function goToQuiz() {
+  document.getElementById("instruction-screen").classList.add("hidden");
+  document.getElementById("quiz-screen").classList.remove("hidden");
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = questions[currentQ];
+  document.getElementById("question-counter").textContent = `Вопрос ${currentQ + 1} из ${questions.length}`;
+  document.getElementById("idiom-text").textContent = q.idiom;
+  document.getElementById("hint").textContent = q.hint;
+  document.getElementById("question-image").src = q.image;
+  
+  const optionsDiv = document.getElementById("options");
+  optionsDiv.innerHTML = "";
+  q.options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.textContent = `${opt.letter}) ${opt.text}`;
+    btn.onclick = () => selectOption(opt.letter);
+    optionsDiv.appendChild(btn);
+  });
+  
+  document.getElementById("progress").style.width = ((currentQ) / questions.length * 100) + "%";
+}
+
+function selectOption(letter) {
+  const q = questions[currentQ];
+  const isCorrect = letter === q.correct;
+  if (isCorrect) score++;
+  
+  userAnswers.push({
+    question: currentQ + 1,
+    idiom: q.idiom,
+    answer: letter,
+    correct: isCorrect
+  });
+  
+  currentQ++;
+  if (currentQ < questions.length) {
+    showQuestion();
+  } else {
+    showFinalTask();
+  }
+}
+
+function showFinalTask() {
+  document.getElementById("quiz-screen").classList.add("hidden");
+  document.getElementById("final-screen").classList.remove("hidden");
+}
+
+function submitFinal() {
+  const favoriteIdiom = document.getElementById("favorite-idiom").value.trim();
+  const idiomTranslation = document.getElementById("idiom-translation").value.trim();
+  
+  if (!favoriteIdiom || !idiomTranslation) {
+    alert("Пожалуйста, заполни оба поля финального задания!");
+    return;
+  }
+  
+  userData.favoriteIdiom = favoriteIdiom;
+  userData.idiomTranslation = idiomTranslation;
+  
+  showResult();
+  sendToGoogleSheets();
+}
+
+function showResult() {
+  const percentage = Math.round((score / questions.length) * 100);
+  document.getElementById("result-score").textContent = `${score}/${questions.length}`;
+  
+  // Выбираем картинку и сообщение в зависимости от результата
+  let resultData;
+  if (percentage >= 90) {
+    resultData = resultImages.excellent;
+  } else if (percentage >= 70) {
+    resultData = resultImages.great;
+  } else if (percentage >= 50) {
+    resultData = resultImages.good;
+  } else {
+    resultData = resultImages.learning;
+  }
+  
+  document.getElementById("result-image").src = resultData.image;
+  document.getElementById("result-message").textContent = resultData.message;
+  
+  document.getElementById("final-screen").classList.add("hidden");
+  document.getElementById("result-screen").classList.remove("hidden");
+}
+
+function sendToGoogleSheets() {
+  // Создаём массив ответов: 1 если правильно, 0 если нет
+  const answersArray = userAnswers.map(a => a.correct ? 1 : 0);
+  
+  const data = {
+    surname: userData.surname,
+    name: userData.name,
+    className: userData.className,
+    score: `${score}/${questions.length}`,
+    answers: answersArray, // Массив из 15 значений (0 или 1)
+    favoriteIdiom: userData.favoriteIdiom,
+    idiomTranslation: userData.idiomTranslation,
+    date: new Date().toLocaleString('ru-RU')
+  };
+  
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data)
+  }).catch(error => {
+    console.error('Ошибка отправки:', error);
+  });
+}
+
+function restart() {
+  currentQ = 0;
+  score = 0;
+  userAnswers = [];
+  userData = {};
+  document.getElementById("surname").value = "";
+  document.getElementById("name").value = "";
+  document.getElementById("class").value = "";
+  document.getElementById("favorite-idiom").value = "";
+  document.getElementById("idiom-translation").value = "";
+  document.getElementById("result-image").src = "";
+  document.getElementById("result-screen").classList.add("hidden");
+  document.getElementById("instruction-screen").classList.add("hidden"); // Добавили
+  document.getElementById("name-screen").classList.remove("hidden");
+}
+</script>
+</body>
+</html>
